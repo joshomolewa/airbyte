@@ -503,6 +503,16 @@ To reduce how often you hit these limits:
 - Stagger the schedules of connections that use the same access token or ad account.
 - Sync fewer streams, or turn off fields you don't need in the connection's schema.
 
+### Sync fails with "Error code ..." and "Facebook details"
+
+When the Graph API returns an error the connector has no specific handling for, the sync fails with a message in this form:
+
+```text
+Error code <code> (subcode <subcode>): <message>. Facebook details: <title>. <details>.
+```
+
+The **Facebook details** part comes from the `error_user_title` and `error_user_msg` fields in Meta's error response. These fields usually explain what to change in your ad account, app, or Business Manager. They only appear when Meta includes them, and the subcode only appears alongside them. To learn more about a specific error, look up the code and subcode in Meta's [Marketing API error reference](https://developers.facebook.com/docs/marketing-api/error-reference/).
+
 ### Missing data for 7-day and 28-day view-through attribution windows
 
 Starting January 12, 2026, Meta removed support for the 7-day view-through (`7d_view`) and 28-day view-through (`28d_view`) attribution windows in the Ads Insights API. In v4.1.3, these attribution windows were removed from request parameters for `ads_insights` and Ads Insights Reports streams. In v5.0.0, the `7d_view` and `28d_view` columns were also removed from stream schemas. Data previously returned for these windows is no longer available. For more information, see Meta's [2025 Out-Of-Cycle Changes](https://developers.facebook.com/docs/marketing-api/out-of-cycle-changes/occ-2025/).
@@ -571,7 +581,7 @@ Facebook’s Ads Insights API dynamically aggregates and filters metrics. Purcha
 
 | Version    | Date       | Pull Request                                             | Subject                                                                                                                                                                                                                                                                                           |
 |:-----------|:-----------|:---------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 6.1.7 | 2026-10-16 | [89019](https://github.com/airbytehq/airbyte/pull/89019) | Include Meta's user-facing error title and message, plus the error subcode, in otherwise generic Graph API error messages |
+| 6.1.7 | 2026-10-19 | [89019](https://github.com/airbytehq/airbyte/pull/89019) | Include Meta's user-facing error title and message, plus the error subcode, in otherwise generic Graph API error messages |
 | 6.1.6 | 2026-10-16 | [89047](https://github.com/airbytehq/airbyte/pull/89047) | Fix in-app setup guide rendering in Airbyte Cloud, update access token setup steps to match Meta's current docs, and correct field descriptions |
 | 6.1.5 | 2026-10-16 | [89006](https://github.com/airbytehq/airbyte/pull/89006) | Upgrade to Python 3.13 and python-connector-base 4.1.1 |
 | 6.1.4 | 2026-10-16 | [89020](https://github.com/airbytehq/airbyte/pull/89020) | Fix `ad_creatives` and `ad_creatives_from_ads` failing on Facebook error 2446211 by emitting affected creatives with a null `object_story_spec` |
